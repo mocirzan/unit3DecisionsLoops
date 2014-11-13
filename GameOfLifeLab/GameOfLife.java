@@ -4,7 +4,8 @@ import info.gridworld.actor.Rock;
 import info.gridworld.grid.Grid;
 import info.gridworld.grid.BoundedGrid;
 import info.gridworld.grid.Location;
-
+import java.awt.Color;
+import java.util.ArrayList;
 /**
  * Game of Life starter code. Demonstrates how to create and populate the game using the GridWorld framework.
  * Also demonstrates how to provide accessor methods to make the class testable by unit tests.
@@ -16,38 +17,37 @@ public class GameOfLife
 {
     // the world comprised of the grid that displays the graphics for the game
     private ActorWorld world;
-    
-    // the game board will have 5 rows and 5 columns
-    private final int ROWS = 5;
-    private final int COLS = 5;
-    
-    // constants for the location of the three cells initially alive
-    private final int X1 = 0, Y1 = 2;
-    private final int X2 = 2, Y2 = 0;
-    private final int X3 = 2, Y3 = 1;
 
-    /**
-     * Default constructor for objects of class GameOfLife
-     * 
-     * @post    the game will be initialized and populated with the initial state of cells
-     * 
-     */
+    // the game board will have 5 rows and 5 columns
+    private final int ROWS = 20;
+    private final int COLS = 20;
+
+    // constants for the location of the three cells initially alive
+    private final int X1 = 8, Y1 = 9;
+    private final int X2 = 7, Y2 = 10;
+    private final int X3 = 8, Y3 = 11;
+    private final int X4 = 9, Y4 = 10;
+    private final int X5 = 8, Y5 = 10;
+
+   
+      //Default constructor for objects of class GameOfLife
+    
     public GameOfLife()
     {
         // create the grid, of the specified size, that contains Actors
         BoundedGrid<Actor> grid = new BoundedGrid<Actor>(ROWS, COLS);
-        
+
         // create a world based on the grid
         world = new ActorWorld(grid);
-        
+
         // populate the game
         populateGame();
-        
+
         // display the newly constructed and populated world
         world.show();
-        
+
     }
-    
+
     /**
      * Creates the actors and inserts them into their initial starting positions in the grid
      *
@@ -60,19 +60,31 @@ public class GameOfLife
         // the grid of Actors that maintains the state of the game
         //  (alive cells contains actors; dead cells do not)
         Grid<Actor> grid = world.getGrid();
-        
+
         // create and add rocks (a type of Actor) to the three intial locations
-        Rock rock1 = new Rock();
+        Rock rock1 = new Rock(Color.RED);
         Location loc1 = new Location(X1, Y1);
         grid.put(loc1, rock1);
-        
-        Rock rock2 = new Rock();
+
+        Rock rock2 = new Rock(Color.RED);
         Location loc2 = new Location(X2, Y2);
         grid.put(loc2, rock2);
-        
-        Rock rock3 = new Rock();
+
+        Rock rock3 = new Rock(Color.RED);
         Location loc3 = new Location(X3, Y3);
         grid.put(loc3, rock3);
+
+        Rock rock4 = new Rock(Color.RED);
+        Location loc4 = new Location(X4, Y4);
+        grid.put(loc4, rock4);
+
+        Rock rock5 = new Rock(Color.RED);
+        Location loc5 = new Location(X5, Y5);
+        grid.put(loc5, rock5);
+
+        
+        
+        
     }
 
     /**
@@ -83,21 +95,36 @@ public class GameOfLife
      * @post    the world has been populated with a new grid containing the next generation
      * 
      */
-    private void createNextGeneration()
+    public void createNextGeneration()
     {
         /** You will need to read the documentation for the World, Grid, and Location classes
          *      in order to implement the Game of Life algorithm and leverage the GridWorld framework.
          */
-        
+
         // create the grid, of the specified size, that contains Actors
         Grid<Actor> grid = world.getGrid();
-        
-        // insert magic here...
-        
+        for (int rows = 0; rows < ROWS; rows ++)
+        {
+            for (int cols = 0; cols < COLS; cols ++)
+            {
+              Actor cell = getActor(rows,cols);
+              Location newLoc = new Location(rows,cols);
+              ArrayList<Actor> neighbors = grid.getNeighbors(newLoc);
+              
+              //if (
+              //{
+
+              //}
+
+          }
+        }
     }
-    
-    /**
-     * Returns the actor at the specified row and column. Intended to be used for unit testing.
+
+        // insert magic here...
+      
+  
+       /**
+     * Retur the actor at the specified row and comn. Intended to be used for unit testing.
      *
      * @param   row the row (zero-based index) of the actor to return
      * @param   col the column (zero-based index) of the actor to return

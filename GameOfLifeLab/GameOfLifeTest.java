@@ -47,10 +47,10 @@ public class GameOfLifeTest
          *  (X: alive; -: dead)
          * 
          *    0 1 2 3 4
-         *  0 - - X - -
-         *  1 - - - - -
-         *  2 X X - - -
-         *  3 - - - - -
+         *  0 - - - - -
+         *  1 - - - X -
+         *  2 - - X X X
+         *  3 - - - X -
          *  4 - - - - -
          *  
          */
