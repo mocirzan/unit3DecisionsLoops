@@ -29,9 +29,7 @@ public class GameOfLife
     private final int X4 = 9, Y4 = 10;
     private final int X5 = 8, Y5 = 10;
 
-   
-      //Default constructor for objects of class GameOfLife
-    
+    //Default constructor for objects of class GameOfLife
     public GameOfLife()
     {
         // create the grid, of the specified size, that contains Actors
@@ -82,9 +80,6 @@ public class GameOfLife
         Location loc5 = new Location(X5, Y5);
         grid.put(loc5, rock5);
 
-        
-        
-        
     }
 
     /**
@@ -107,23 +102,45 @@ public class GameOfLife
         {
             for (int cols = 0; cols < COLS; cols ++)
             {
-              Actor cell = getActor(rows,cols);
-              Location newLoc = new Location(rows,cols);
-              ArrayList<Actor> neighbors = grid.getNeighbors(newLoc);
-              
-              //if (
-              //{
+                Actor cell = getActor(rows,cols);
+                Location newLoc = new Location(rows,cols);
+                ArrayList<Location> neighbors = grid.getOccupiedAdjacentLocations(newLoc);
+                int numNeighbors = neighbors.size();
+                int lives = 0;
+                //Alive cells
+                if (cell != null)
+                {
 
-              //}
+                    if (numNeighbors  < 2)
+                    {
+                        grid.remove(newLoc);
+                    }
 
-          }
+                    if (numNeighbors == 2 || numNeighbors == 3)
+                    {
+                        lives += 1;
+                    }
+
+                    if (numNeighbors > 3)
+                    {
+                        grid.remove(newLoc);
+                    }
+                    
+
+                    else
+                    {
+                        if (numNeighbors == 3)
+                        {
+                            Rock newRock = new Rock();
+                            grid.put(newLoc, newRock);
+                        }
+                    }
+                }
+            }
         }
     }
 
-        // insert magic here...
-      
-  
-       /**
+    /**
      * Retur the actor at the specified row and comn. Intended to be used for unit testing.
      *
      * @param   row the row (zero-based index) of the actor to return
@@ -147,7 +164,7 @@ public class GameOfLife
     {
         return ROWS;
     }
-    
+
     /**
      * Returns the number of columns in the game board
      *
@@ -157,8 +174,7 @@ public class GameOfLife
     {
         return COLS;
     }
-    
-    
+
     /**
      * Creates an instance of this class. Provides convenient execution.
      *
