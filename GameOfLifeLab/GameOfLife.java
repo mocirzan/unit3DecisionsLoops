@@ -6,6 +6,7 @@ import info.gridworld.grid.BoundedGrid;
 import info.gridworld.grid.Location;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.lang.*;
 /**
  * Game of Life starter code. Demonstrates how to create and populate the game using the GridWorld framework.
  * Also demonstrates how to provide accessor methods to make the class testable by unit tests.
@@ -19,8 +20,8 @@ public class GameOfLife
     private ActorWorld world;
 
     // the game board will have 5 rows and 5 columns
-    private final int ROWS = 20;
-    private final int COLS = 20;
+    private final int ROWS = 50;
+    private final int COLS = 50;
 
     // constants for the location of the three cells initially alive
     private final int X1 = 8, Y1 = 9;
@@ -59,24 +60,24 @@ public class GameOfLife
         //  (alive cells contains actors; dead cells do not)
         Grid<Actor> grid = world.getGrid();
 
-        // create and add rocks (a type of Actor) to the three intial locations
-        Rock rock1 = new Rock(Color.RED);
+        // create and add rocks (a type of Actor) to the 5 intial locations
+        Rock rock1 = new Rock();
         Location loc1 = new Location(X1, Y1);
         grid.put(loc1, rock1);
 
-        Rock rock2 = new Rock(Color.RED);
+        Rock rock2 = new Rock();
         Location loc2 = new Location(X2, Y2);
         grid.put(loc2, rock2);
 
-        Rock rock3 = new Rock(Color.RED);
+        Rock rock3 = new Rock();
         Location loc3 = new Location(X3, Y3);
         grid.put(loc3, rock3);
 
-        Rock rock4 = new Rock(Color.RED);
+        Rock rock4 = new Rock();
         Location loc4 = new Location(X4, Y4);
         grid.put(loc4, rock4);
 
-        Rock rock5 = new Rock(Color.RED);
+        Rock rock5 = new Rock();
         Location loc5 = new Location(X5, Y5);
         grid.put(loc5, rock5);
 
@@ -98,46 +99,64 @@ public class GameOfLife
 
         // create the grid, of the specified size, that contains Actors
         Grid<Actor> grid = world.getGrid();
+
+        // List of locations where the next generation of cells will be created
+        ArrayList<Location> cellsToCreate = new ArrayList<Location>();
+
+        // Iterates through the grid and checks for neighbors of alive and dead cells.
         for (int rows = 0; rows < ROWS; rows ++)
         {
             for (int cols = 0; cols < COLS; cols ++)
             {
                 Actor cell = getActor(rows,cols);
-                Location newLoc = new Location(rows,cols);
-                ArrayList<Location> neighbors = grid.getOccupiedAdjacentLocations(newLoc);
+                Location cellLoc = new Location(rows,cols);
+                ArrayList<Actor> neighbors = grid.getNeighbors(cellLoc);
                 int numNeighbors = neighbors.size();
-                int lives = 0;
-                //Alive cells
+
+                //Checks alive cells for certain amount of neighbors
                 if (cell != null)
                 {
-
-                    if (numNeighbors  < 2)
+                    if (numNeighbors == 3 || numNeighbors == 2)
                     {
-                        grid.remove(newLoc);
+                        // Appends location list of current location for creation in next generation
+                        cellsToCreate.add(cellLoc);
                     }
+                }
 
-                    if (numNeighbors == 2 || numNeighbors == 3)
+                //Checks dead cells for certain amount of neighbors
+                else
+                {
+                    if (numNeighbors == 3)
                     {
-                        lives += 1;
-                    }
-
-                    if (numNeighbors > 3)
-                    {
-                        grid.remove(newLoc);
-                    }
-                    
-
-                    else
-                    {
-                        if (numNeighbors == 3)
-                        {
-                            Rock newRock = new Rock();
-                            grid.put(newLoc, newRock);
-                        }
+                        // Appends location list of current location for creation in next generation
+                        cellsToCreate.add(cellLoc);
                     }
                 }
             }
         }
+
+        // Clears grid
+        for (int rows = 0; rows < ROWS; rows ++)
+        {
+            for (int cols = 0; cols < COLS; cols ++)
+            {
+                Actor cell = getActor(rows,cols);
+                Location cellLoc = new Location(rows,cols);
+                grid.remove(cellLoc);
+            }
+        }
+
+        // Creates next generation of cells
+        for (int i = 0; i < cellsToCreate.size(); i++)
+        {
+            Location newLoc = cellsToCreate.get(i);
+            Rock newRock = new Rock();
+            grid.put(newLoc, newRock);
+
+        }
+        
+        // Sets grid.
+        world.setGrid(grid);
     }
 
     /**
@@ -179,9 +198,17 @@ public class GameOfLife
      * Creates an instance of this class. Provides convenient execution.
      *
      */
-    public static void main(String[] args)
+    public static void main(String[] args) throws InterruptedException
+
     {
         GameOfLife game = new GameOfLife();
+        Thread.sleep(1000);
+        for (int i = 0; i < 100; i++)
+        {
+            game.createNextGeneration();
+            Thread.sleep(100);
+        }
+
     }
 
 }
